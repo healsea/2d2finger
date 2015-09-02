@@ -74,7 +74,7 @@ sxf = sxf+vxf*30;
 syf = syf+vyf*30;
 thetaf = syf+omegaf*30;
 
-for outfunnum = 1:200
+for outfunnum = 1:201
     acc;
 end
 pause;
@@ -123,7 +123,7 @@ for k = 1:300 % regard 300 as reaction time
 	%pause(0.1);
 end
 pause;
-for outfunnum =1:200
+for outfunnum =1:201
     vx = vx + 0.1*ax;
     vy = vy + 0.1*ay;
     omega = omega + 0.1*beta1;
@@ -171,7 +171,7 @@ xobjf = xandf(1:4); % store next initial pos in obj coordinate
 
 
 %%%%%%%%% step 9 back  %%%%%%%%%%%%%%
-for outfunnum =1:200
+for outfunnum =1:201
     vx = vx + 0.1*ax;
     vy = vy + 0.1*ay;
     omega = omega + 0.1*beta1;
@@ -194,7 +194,7 @@ end
 ax = 0;
 ay = 0;
 beta1 = 0;
-for outfunnum =1:200
+for outfunnum =1:150
     vx = vx + 0.1*ax;
     vy = vy + 0.1*ay;
     omega = omega + 0.1*beta1;
@@ -218,7 +218,7 @@ end
 ax = 0.0015;    
 ay = 0.0015;
 beta1 = pi/2000;
-for outfunnum =1:200
+for outfunnum =1:201
     vx = vx + 0.1*ax;
     vy = vy + 0.1*ay;
     omega = omega + 0.1*beta1;

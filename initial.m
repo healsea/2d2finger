@@ -26,10 +26,12 @@ theta = 0;
 vx = 0.03;
 vy = 0.03;
 omega = pi/100;
-ax = 0.003;    %acceleration
-ay = 0.003;
-beta1 = pi/1000;    %angular acceleration
+ax = -0.0015;    %acceleration
+ay = -0.0015;
+beta1 = -pi/2000;    %angular acceleration
 
+axf=ax; ayf=ay; beta1f=beta1; vxf=vx; vyf=vy; omegaf=omega; sxf=sx; syf=sy; thetaf=theta;
+rorf = ror; rorshif=rorshi;
 % boundary
 VLB = [0.2;-0.1;0.2;0.2;5;-Inf;5;-Inf];  % low boundary
 VUB = [1.8*ones(4,1);Inf*ones(4,1)];  %high boundary
