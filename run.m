@@ -1,5 +1,4 @@
-clear
-close all
+
 %%%%variables explanation%%%%
 % xandf :Ã£â‚?he result of programming,which is the finger pos in obj coordinate
 % xobjf :  4*1 matrix. only become 8*1 when to initialize xandf .the value is the same as xandf, it is used to initilize programming
@@ -14,16 +13,13 @@ close all
 % finPos : handle of finger figure
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  initial
+initial; %initial the value
+
 % figure
 figure;
 axis equal
 axis([-2,4.5,-3,3])  
 hold on
-
-% friction coefficient
-U = 0.5;
-mass = 10;
-rormass = 10*4/9;
 
 % store optimal data from outfun so that we can draw it after optimalization
 global outfunstore;
@@ -31,45 +27,14 @@ global outfunnum;
 outfunnum = 1;
 outfunstore = zeros(300,4);
 
-% joint position
-r0 = [5;0];
-
-% store every results
-final = zeros(100,8);
-resultnum = 1;
-
-%orientation matrix
-rorshi = eye(3); %rotate combine with shift
-ror = eye(2);
-
-% boundary
-VLB = [0.2;-0.1;0.2;0.2;5;-Inf;5;-Inf];  % low boundary
-VUB = [1.8*ones(4,1);Inf*ones(4,1)];  %high boundary
-xobjf =[1;0;1;1]; %initial finger object position
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% object
-% This m file describe the position and orientation of the object to be grasped
-% ALL data is measured in the object coordinate, not world coordinate
-
-yobj = [0 0 2 0 0 2];   %object initial position,never change
-ycenter = [2/3 2/3];    %object mass center position
-
-% normal orientation of the object
-R1 = [0 1;1 0]; % contact point on the bottom
-R2 = [-sqrt(1/2) sqrt(1/2);-sqrt(1/2) -sqrt(1/2)];
-R = blkdiag(R1,R2);
 
 
 %%%%%%%step 1 object pos in world coordinate%%%%%%
 objPos = drawobj(yobj,rorshi);
 
 %%%%%%%step 2 external force in obj coordinate%%%%%%
-
-FeG = [eye(2);0 0]; % the center of gravity don't change in object coordinate
-FeN = inv(ror)*[-sqrt(1/2);-sqrt(1/2)]; % gravity orientation will change. It is always [-sqrt(1/2);-sqrt(1/2)] in world coordinate
-Fenum = 30*sqrt(2); % the weight is 10N
-global Fe;
 Fe = FeG*FeN*Fenum;
+
 
 %%%%%%%step 3 make finger pos in obj coordinate meet the constraint%%%%%%
 xobjf(2) = 0;
@@ -77,10 +42,6 @@ xobjf(4) = 2 - xobjf(3);
 
 [finPos line1 line2] = drawfin(ror,rorshi,R1,R2,xobjf);
 
-j = 1; % make the index in outfun.m correct
-fmat = moviein(100); % create movie matrix
-fmat(:,j) = getframe;
-j = j+1;
 
 %%%%%%%step 4 finger pos in obj coordinate%%%%%%
 
@@ -95,26 +56,26 @@ for i = 1:outfunnum-1
     [finPos line1 line2] = drawfin(ror,rorshi,R1,R2,outfunstore(i,:));
     fmat(:,j) = getframe;
     j = j+1;      
-    pause(0.5);
+    %pause(0.5);
 end
 
+%store final result
 final(resultnum,:) = xandf;
 resultnum = resultnum+1;
 
 %%%%%%%step 5 finger pos in world coordinate%%%%%%
 xobjf = xandf(1:4); % store next initial pos in obj coordinate
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% slip
 %%%%%%step 6 slip and find new obj coordinate%%%%%%
 
-for k = 1:300  % regard 100 as reaction time
-	dis =  0.003;  % slip velocity
-    omega = pi/1000;  % slip angle velocity
+for k = 1:300 % regard 300 as reaction time
+	sx = vx*0.1+sx;  % 0.1 is time
+    sy = vy*0.1+sy;
+    theta = omega*0.1+theta;  % slip angle velocity
 
-    rorshi1 = rorshi;
-    rorshi =[cos(k*omega) -sin(k*omega) -k*dis;sin(k*omega) cos(k*omega) 0;0 0 1]; %update rorshi
-    ror = [cos(k*omega) -sin(k*omega) ;sin(k*omega) cos(k*omega)];
+    rorshi1 = rorshi;  % this is used to let finger is one step behind object
+    rorshi =[cos(theta) -sin(theta) sx;sin(theta) cos(theta) sy;0 0 1]; %update rorshi
+    ror = [cos(theta) -sin(theta) ;sin(theta) cos(theta)];
     
     delete(objPos);
     objPos = drawobj(yobj,rorshi);  
@@ -144,11 +105,27 @@ for k = 1:300  % regard 100 as reaction time
 		fmat(:,j) = getframe;
         j = j+1;
     end
-	pause(0.015);
+	%pause(0.015);
 end
 
+
+for lala = 1:100
+    acc;
+end
+
+
 pause;
+
+
+
+
+
+
+
+
+
 %%%%%%%%% step 7 re-programmming at new world position
+FeG = [eye(2);0 0]; 
 FeN = inv(ror)*[-sqrt(1/2);-sqrt(1/2)]; % renew Fe as coordinate changed
 Fe = FeG*FeN*Fenum;
 

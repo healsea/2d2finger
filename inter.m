@@ -1,6 +1,5 @@
 function rinter = inter(r0,r)
 % INTER calculated the inter-joint position when hand's manipulator arrives at a given point.
-
 L = 3; % length of one leg.
 
 if(norm(r-r0) > 6)
