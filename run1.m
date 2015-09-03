@@ -1,6 +1,6 @@
 
 %%%%variables explanation%%%%
-% xandf :ã�?he result of programming,which is the finger pos in obj coordinate
+% xandf :Ã£â‚?he result of programming,which is the finger pos in obj coordinate
 % xobjf :  4*1 matrix. only become 8*1 when to initialize xandf .the value is the same as xandf, it is used to initilize programming
 % xworld : the finger pos in world coordinate
 % yobj : object pos in obj coordinate, which is never change
@@ -25,7 +25,7 @@ hold on
 global outfunstore;
 global outfunnum;
 outfunnum = 1;
-outfunstore = zeros(300,4);
+outfunstore = zeros(600,4);
 
 
 
@@ -41,27 +41,29 @@ xobjf(2) = 0;
 xobjf(4) = 2 - xobjf(3);
 
 [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
-
+pause;
 
 %%%%%%%step 4 finger pos in obj coordinate%%%%%%
 
 xobjf =[xobjf;20;0;20;0];
-options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%è®¾ç½®å¤–éƒ¨å�?½æ•°ã€?
+options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%Ã¨Â®Â¾Ã§Â½Â®Ã¥Â¤â€“Ã©Æ’Â¨Ã¥â?Â½Ã¦â€¢Â°Ã£â‚¬?
 [xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe),options)  % compute,the result stores in x(obj coordinate)
 
 for i = 1:outfunnum-1
     delete(line1);
     delete(line2);
     delete(finPos);
-    [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,outfunstore(i,:));
-    fmat(:,j) = getframe;
-    j = j+1;      
-    %pause(0.5);
+    [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,outfunstore(i,:));   
+    
+    pause(0.5);
 end
 
 %store final result
 final(resultnum,:) = xandf;
+MAXF(resultnum,:) = fval;
 resultnum = resultnum+1;
+
+pause;
 
 %%%%%%%step 5 finger pos in world coordinate%%%%%%
 xobjf = xandf(1:4); % store next initial pos in obj coordinate
@@ -74,8 +76,8 @@ sxf = sxf+vxf*30;
 syf = syf+vyf*30;
 thetaf = syf+omegaf*30;
 
-for outfunnum = 1:201
-    acc;
+for outfunnum = 1:200
+    acc1;
 end
 pause;
 
@@ -116,14 +118,11 @@ for k = 1:300 % regard 300 as reaction time
     delete(finPos);
     [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
 
-	if  (mod(k,5) == 0)
-		fmat(:,j) = getframe;
-        j = j+1;
-    end
-	%pause(0.1);
+	pause(0.1);
 end
 pause;
-for outfunnum =1:201
+
+for outfunnum =1:200
     vx = vx + 0.1*ax;
     vy = vy + 0.1*ay;
     omega = omega + 0.1*beta1;
@@ -138,11 +137,11 @@ for outfunnum =1:201
     delete(line1);
     delete(line2);
     delete(finPos);
-    [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,outfunstore(outfunnum,:));
+    [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
     pause(0.01);
 end
 
-
+pause
 
 %%%%%%%%% step 8 re-programmming at new world position
 FeG = [eye(2);0 0]; 
@@ -151,7 +150,7 @@ Fe = FeG*FeN*Fenum;
 
 xobjf =[xobjf;20;0;20;0];
 outfunnum = 1;
-options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%è®¾ç½®å¤–éƒ¨å�?½æ•°ã€?
+options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%Ã¨Â®Â¾Ã§Â½Â®Ã¥Â¤â€“Ã©Æ’Â¨Ã¥â?Â½Ã¦â€¢Â°Ã£â‚¬?
 [xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe),options)  % compute,the result stores in x(obj coordinate)
 
 for i = 1:outfunnum-1
@@ -159,19 +158,40 @@ for i = 1:outfunnum-1
     delete(line2);
     delete(finPos);
     [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,outfunstore(i,:));
-    fmat(:,j) = getframe;
-    j = j+1;      
     pause(0.5);
 end
 
 final(resultnum,:) = xandf;
+MAXF(resultnum,:) = fval;
 resultnum = resultnum+1;
 
 xobjf = xandf(1:4); % store next initial pos in obj coordinate
-
+pause;
 
 %%%%%%%%% step 9 back  %%%%%%%%%%%%%%
-for outfunnum =1:201
+%%% compute the force when back
+
+for outfunnum = 1:200
+    acc1;
+end
+ax = 0;
+ay = 0;
+beta1 = 0;
+for outfunnum = 201:400
+    acc1;
+end
+ax = 0.0015;    
+ay = 0.0015;
+beta1 = pi/2000;
+for outfunnum = 401:600
+    acc1;
+end
+
+% draw the scene when back
+ax = -0.0015;    
+ay = -0.0015;
+beta1 = -pi/2000;
+for i =1:200
     vx = vx + 0.1*ax;
     vy = vy + 0.1*ay;
     omega = omega + 0.1*beta1;
@@ -187,14 +207,13 @@ for outfunnum =1:201
     delete(line2);
     delete(finPos);
     [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
-    %[finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,outfunstore(outfunnum,:));
     pause(0.01);
 end
 
 ax = 0;
 ay = 0;
 beta1 = 0;
-for outfunnum =1:150
+for i =201:400
     vx = vx + 0.1*ax;
     vy = vy + 0.1*ay;
     omega = omega + 0.1*beta1;
@@ -210,7 +229,6 @@ for outfunnum =1:150
     delete(line2);
     delete(finPos);
     [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
-    %[finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,outfunstore(outfunnum,:));
     pause(0.01);
 end
 
@@ -218,7 +236,7 @@ end
 ax = 0.0015;    
 ay = 0.0015;
 beta1 = pi/2000;
-for outfunnum =1:201
+for outfunnum =401:600
     vx = vx + 0.1*ax;
     vy = vy + 0.1*ay;
     omega = omega + 0.1*beta1;
@@ -234,66 +252,31 @@ for outfunnum =1:201
     delete(line2);
     delete(finPos);
     [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
-    %[finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,outfunstore(outfunnum,:));
     pause(0.01);
 end
-pause;
-% for k = 1:300  % regard 100 as reaction timeååº”æ�?¶é—�?
-% 	dis =  0.003;  % slip velocity
-%     omega = pi/1000;  % slip angle velocity
-
-%     rorshi =[cos(k*omega) -sin(k*omega) -k*dis;sin(k*omega) cos(k*omega) 0;0 0 1]; %update rorshi
-%     ror = [cos(k*omega) -sin(k*omega) ;sin(k*omega) cos(k*omega)];
-    
-%     delete(objPos);
-%     objPos = drawobj(yobj,rorshi);
-%     delete(line1);
-%     delete(line2);
-%     delete(finPos);
-%     [finPos line1 line2] = drawfin(ror,rorshi,R1,R2,xobjf);
-
-%     if (mod(k,15) == 0)
-% 		fmat(:,j) = getframe;
-%         j = j+1;
-%     end
-%     pause(0.015);
-% end
-pause;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-%%%%%%%%% step 7 re-programmming when back to world position
+pause
+%%%%%%%%% step 9 re-programmming when back to world position
 FeG = [eye(2);0 0]; % the center of gravity don't change in object coordinate
 FeN = inv(ror)*[-sqrt(1/2);-sqrt(1/2)]; % renew Fe as coordinate changed
 Fe = FeG*FeN*Fenum;
 
 xobjf =[xobjf;20;0;20;0];
 outfunnum = 1;
-options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%è®¾ç½®å¤–éƒ¨å�?½æ•°ã€?
+options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%Ã¨Â®Â¾Ã§Â½Â®Ã¥Â¤â€“Ã©Æ’Â¨Ã¥â?Â½Ã¦â€¢Â°Ã£â‚¬?
 [xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe),options)  % compute,the result stores in x(obj coordinate)
 
 for i = 1:outfunnum-1
     delete(line1);
     delete(line2);
     delete(finPos);
-    [finPos line1 line2] = drawfin(ror,rorshi,R1,R2,outfunstore(i,:));
-    fmat(:,j) = getframe;
-    j = j+1;      
+    [finPos line1 line2] = drawfin(ror,rorshi,R1,R2,outfunstore(i,:));     
     pause(0.5);
 end
 
 final(resultnum,:) = xandf;
+MAXF(resultnum,:) = fval;
 resultnum = resultnum+1;
 
 xobjf = xandf(1:4); % store next initial pos in obj coordinate
@@ -302,6 +285,4 @@ delete(line1);
 delete(line2);
 delete(finPos);
 [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
-
-fmat(:,j) = getframe;
-j = j+1;
+pause

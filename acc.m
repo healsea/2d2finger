@@ -10,7 +10,9 @@ Fg = [rorf*Fg(1:2);Fg(3)];
 [xandf fval exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear1(xandf,U,R,Fe,Fg,ycenter));
 % store resultnum
 final(resultnum,:) = xandf;
+MAXF(resultnum,:) = fval;
 resultnum = resultnum+1;
+
 xobjf = xandf(1:4);
 outfunstore(outfunnum,:) = xobjf';
 % renew velocity

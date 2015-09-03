@@ -12,8 +12,9 @@ rormass = 10*4/9;
 r0 = [5;0];
 
 % store every results
-final = zeros(100,8);
+final = zeros(1000,8);
 resultnum = 1;
+MAXF = zeros(1000,1);
 
 %orientation matrix
 rorshi = eye(3); %rotate combine with shift
@@ -53,9 +54,4 @@ FeG = [eye(2);0 0]; % the center of gravity don't change in object coordinate
 FeN = inv(ror)*[-sqrt(1/2);-sqrt(1/2)]; % gravity orientation will change. It is always [-sqrt(1/2);-sqrt(1/2)] in world coordinate
 Fenum = 30*sqrt(2); % the weight is 30N
 
-% record picture
-j = 1; % make the index in outfun.m correct
-fmat = moviein(100); % create movie matrix
-fmat(:,j) = getframe;
-j = j+1;
 
