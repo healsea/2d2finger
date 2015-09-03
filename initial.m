@@ -5,8 +5,8 @@ close all
 U = 0.5;
 
 % mass and moment of inertia
-mass = 10;
-rormass = 10*4/9;
+mass = 100;
+rormass = 100*4/9;
 
 % joint position
 r0 = [5;0];

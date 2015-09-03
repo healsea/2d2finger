@@ -1,3 +1,4 @@
+% this script program the contact force when operate objects
 FeG = [eye(2);-ycenter];
 FeN = inv(rorf)*[-sqrt(1/2);-sqrt(1/2)]; % gravity orientation will change. It is always [-sqrt(1/2);-sqrt(1/2)] in world coordinate
 Fe = FeG*FeN*Fenum;

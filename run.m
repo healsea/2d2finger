@@ -1,6 +1,6 @@
 
 %%%%variables explanation%%%%
-% xandf :ã�?he result of programming,which is the finger pos in obj coordinate
+% xandf :Ã£â‚?he result of programming,which is the finger pos in obj coordinate
 % xobjf :  4*1 matrix. only become 8*1 when to initialize xandf .the value is the same as xandf, it is used to initilize programming
 % xworld : the finger pos in world coordinate
 % yobj : object pos in obj coordinate, which is never change
@@ -20,7 +20,7 @@ figure;
 axis equal
 axis([-2,4.5,-3,3])  
 hold on
-
+pause;
 % store optimal data from outfun so that we can draw it after optimalization
 global outfunstore;
 global outfunnum;
@@ -41,12 +41,12 @@ xobjf(2) = 0;
 xobjf(4) = 2 - xobjf(3);
 
 [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
-pause;
+pause(2);
 
 %%%%%%%step 4 finger pos in obj coordinate%%%%%%
 
 xobjf =[xobjf;20;0;20;0];
-options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%è®¾ç½®å¤–éƒ¨å�?½æ•°ã€?
+options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%Ã¨Â®Â¾Ã§Â½Â®Ã¥Â¤â€“Ã©Æ’Â¨Ã¥â?Â½Ã¦â€¢Â°Ã£â‚¬?
 [xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe),options)  % compute,the result stores in x(obj coordinate)
 
 for i = 1:outfunnum-1
@@ -63,7 +63,6 @@ final(resultnum,:) = xandf;
 MAXF(resultnum,:) = fval;
 resultnum = resultnum+1;
 
-pause;
 
 %%%%%%%step 5 finger pos in world coordinate%%%%%%
 xobjf = xandf(1:4); % store next initial pos in obj coordinate
@@ -79,7 +78,7 @@ thetaf = syf+omegaf*30;
 for outfunnum = 1:200
     acc;
 end
-pause;
+pause(2);
 
 
 %%%%%%step 6 slip and find new obj coordinate%%%%%%
@@ -118,9 +117,8 @@ for k = 1:300 % regard 300 as reaction time
     delete(finPos);
     [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
 
-	pause(0.1);
+	pause(0.01);
 end
-pause;
 
 for outfunnum =1:200
     vx = vx + 0.1*ax;
@@ -141,7 +139,7 @@ for outfunnum =1:200
     pause(0.01);
 end
 
-pause
+pause(2)
 
 %%%%%%%%% step 8 re-programmming at new world position
 FeG = [eye(2);0 0]; 
@@ -150,7 +148,7 @@ Fe = FeG*FeN*Fenum;
 
 xobjf =[xobjf;20;0;20;0];
 outfunnum = 1;
-options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%è®¾ç½®å¤–éƒ¨å�?½æ•°ã€?
+options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%Ã¨Â®Â¾Ã§Â½Â®Ã¥Â¤â€“Ã©Æ’Â¨Ã¥â?Â½Ã¦â€¢Â°Ã£â‚¬?
 [xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe),options)  % compute,the result stores in x(obj coordinate)
 
 for i = 1:outfunnum-1
@@ -166,7 +164,7 @@ MAXF(resultnum,:) = fval;
 resultnum = resultnum+1;
 
 xobjf = xandf(1:4); % store next initial pos in obj coordinate
-pause;
+pause(2);
 
 %%%%%%%%% step 9 back  %%%%%%%%%%%%%%
 %%% compute the force when back
@@ -256,7 +254,7 @@ for outfunnum =401:600
 end
 
 
-pause
+pause(2);
 %%%%%%%%% step 9 re-programmming when back to world position
 FeG = [eye(2);0 0]; % the center of gravity don't change in object coordinate
 FeN = inv(ror)*[-sqrt(1/2);-sqrt(1/2)]; % renew Fe as coordinate changed
@@ -264,7 +262,7 @@ Fe = FeG*FeN*Fenum;
 
 xobjf =[xobjf;20;0;20;0];
 outfunnum = 1;
-options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%è®¾ç½®å¤–éƒ¨å�?½æ•°ã€?
+options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%Ã¨Â®Â¾Ã§Â½Â®Ã¥Â¤â€“Ã©Æ’Â¨Ã¥â?Â½Ã¦â€¢Â°Ã£â‚¬?
 [xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe),options)  % compute,the result stores in x(obj coordinate)
 
 for i = 1:outfunnum-1
@@ -277,7 +275,6 @@ end
 
 final(resultnum,:) = xandf;
 MAXF(resultnum,:) = fval;
-resultnum = resultnum+1;
 
 xobjf = xandf(1:4); % store next initial pos in obj coordinate
 
@@ -285,4 +282,3 @@ delete(line1);
 delete(line2);
 delete(finPos);
 [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
-pause
