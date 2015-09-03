@@ -33,6 +33,17 @@ beta1 = -pi/2000;    %angular acceleration
 
 axf=ax; ayf=ay; beta1f=beta1; vxf=vx; vyf=vy; omegaf=omega; sxf=sx; syf=sy; thetaf=theta;
 rorf = ror; rorshif=rorshi;
+
+
+% initial objcet position
+yobj = [0 0 2 0 0 2];   %object initial position,never change
+ycenter = [2/3 2/3];    %object mass center position
+
+%%%%%%%%%% change when start at different surface%%%%%%%%%%%%%%%
+% we also need to change run.m on line 104, which is examine 
+% weather the finger on the object exceed the maximum
+% we also need to change intersect.m about choosing yobj
+
 % boundary
 VLB = [0.2;-0.1;0.2;0.2;5;-Inf;5;-Inf];  % low boundary
 VUB = [1.8*ones(4,1);Inf*ones(4,1)];  %high boundary
@@ -40,14 +51,16 @@ VUB = [1.8*ones(4,1);Inf*ones(4,1)];  %high boundary
 %initial finger object position
 xobjf =[1;0;1;1]; 
 
-% initial objcet position
-yobj = [0 0 2 0 0 2];   %object initial position,never change
-ycenter = [2/3 2/3];    %object mass center position
-
 % normal orientation of the object
 R1 = [0 1;1 0]; % contact point on the bottom
 R2 = [-sqrt(1/2) sqrt(1/2);-sqrt(1/2) -sqrt(1/2)];
 R = blkdiag(R1,R2);
+
+% coordinate constraint when programming
+ctact_mat = [0 1 0 0 ;0 0 1 1]; % contact constraint 
+ctact_con = [0;2];  
+
+%%%%%%%%c change end %%%%%%%%%%%%%%
 
 % force initial
 FeG = [eye(2);0 0]; % the center of gravity don't change in object coordinate

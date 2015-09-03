@@ -37,8 +37,6 @@ Fe = FeG*FeN*Fenum;
 
 
 %%%%%%%step 3 make finger pos in obj coordinate meet the constraint%%%%%%
-xobjf(2) = 0;
-xobjf(4) = 2 - xobjf(3);
 
 [finPos,line1,line2] = drawfin(ror,rorshi,R1,R2,xobjf);
 pause(2);
@@ -47,7 +45,7 @@ pause(2);
 
 xobjf =[xobjf;20;0;20;0];
 options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%Ã¨Â®Â¾Ã§Â½Â®Ã¥Â¤â€“Ã©Æ’Â¨Ã¥â?Â½Ã¦â€¢Â°Ã£â‚¬?
-[xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe),options)  % compute,the result stores in x(obj coordinate)
+[xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe,ctact_mat,ctact_con),options);  % compute,the result stores in x(obj coordinate)
 
 for i = 1:outfunnum-1
     delete(line1);
@@ -149,7 +147,7 @@ Fe = FeG*FeN*Fenum;
 xobjf =[xobjf;20;0;20;0];
 outfunnum = 1;
 options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%Ã¨Â®Â¾Ã§Â½Â®Ã¥Â¤â€“Ã©Æ’Â¨Ã¥â?Â½Ã¦â€¢Â°Ã£â‚¬?
-[xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe),options)  % compute,the result stores in x(obj coordinate)
+[xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe,ctact_mat,ctact_con),options);  % compute,the result stores in x(obj coordinate)
 
 for i = 1:outfunnum-1
     delete(line1);
@@ -263,7 +261,7 @@ Fe = FeG*FeN*Fenum;
 xobjf =[xobjf;20;0;20;0];
 outfunnum = 1;
 options = optimset('outputfcn',@outfun,'display','iter','Algorithm','active-set');%Ã¨Â®Â¾Ã§Â½Â®Ã¥Â¤â€“Ã©Æ’Â¨Ã¥â?Â½Ã¦â€¢Â°Ã£â‚¬?
-[xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe),options)  % compute,the result stores in x(obj coordinate)
+[xandf,fval,exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear(xandf,U,R,Fe,ctact_mat,ctact_con),options);  % compute,the result stores in x(obj coordinate)
 
 for i = 1:outfunnum-1
     delete(line1);

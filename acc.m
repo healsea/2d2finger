@@ -8,7 +8,7 @@ xobjf = [xobjf;20;0;20;0];
 Fg = -[mass;mass;rormass].*[axf;ayf;beta1f];  % inerital force
 Fg = [rorf*Fg(1:2);Fg(3)];
 
-[xandf fval exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear1(xandf,U,R,Fe,Fg,ycenter));
+[xandf fval exitflag]= fmincon('maxf',xobjf,[],[],[],[],VLB,VUB,@(xandf) nonlinear1(xandf,U,R,Fe,Fg,ycenter,ctact_mat,ctact_con));
 % store resultnum
 final(resultnum,:) = xandf;
 MAXF(resultnum,:) = fval;
