@@ -170,15 +170,15 @@ pause(2);
 for outfunnum = 1:200
     acc;
 end
-ax = 0;
-ay = 0;
-beta1 = 0;
+axf = 0;
+ayf = 0;
+beta1f = 0;
 for outfunnum = 201:400
     acc;
 end
-ax = 0.0015;    
-ay = 0.0015;
-beta1 = pi/2000;
+axf = 0.0015;    
+ayf = 0.0015;
+beta1f = pi/2000;
 for outfunnum = 401:600
     acc;
 end
