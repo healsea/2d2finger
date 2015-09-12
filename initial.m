@@ -5,8 +5,8 @@ close all
 U = 0.5;
 
 % mass and moment of inertia
-mass = 100;
-rormass = 100*4/9;
+mass = 3;
+rormass = 3*4/9;
 
 % joint position
 r0 = [5;0];
@@ -63,7 +63,7 @@ ctact_con = [0;2];
 %%%%%%%%c change end %%%%%%%%%%%%%%
 
 % force initial
-FeG = [eye(2);0 0]; % the center of gravity don't change in object coordinate
+FeG = [eye(2);VtoR(ycenter)]; % the center of gravity don't change in object coordinate
 FeN = inv(ror)*[-sqrt(1/2);-sqrt(1/2)]; % gravity orientation will change. It is always [-sqrt(1/2);-sqrt(1/2)] in world coordinate
 Fenum = 30*sqrt(2); % the weight is 30N
 

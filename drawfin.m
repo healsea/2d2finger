@@ -1,9 +1,9 @@
 function [finPos line1 line2] = drawfin(ror,rorshi,R1,R2,xobjf)
 %DRAWFIN is used to draw fingers and arms
-r0 = [4;0]; % position of arm start point
+r0 = [2;0]; % position of arm start point
 
-n1 = -ror*R1(:,1);
-n2 = -ror*R2(:,1);
+n1 = -[cos(pi/4) -sin(pi/4);sin(pi/4) cos(pi/4)]*ror*R1(:,1);
+n2 = -[cos(pi/4) -sin(pi/4);sin(pi/4) cos(pi/4)]*ror*R2(:,1);
 
 xworld = obj2world(xobjf,rorshi);
 xdraw = xworld +0.1*[n1;n2];    % find circle's center,0.1 is the radius

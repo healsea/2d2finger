@@ -18,7 +18,7 @@ initial; %initial the value
 % figure
 figure;
 axis equal
-axis([-2,4.5,-3,3])  
+axis([-3.5,3,-2,4])  
 hold on
 pause;
 % store optimal data from outfun so that we can draw it after optimalization
